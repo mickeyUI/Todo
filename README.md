@@ -1,151 +1,119 @@
-# 📝 Full Stack Todo App
+# Todo App with FastAPI and PostgreSQL
 
-A full-stack Todo application built with **FastAPI**, **PostgreSQL**, and **React**.
-Users can register, log in, and manage their personal tasks with authentication.
+A simple Todo application built with FastAPI, SQLAlchemy, and PostgreSQL. It allows users to register, add tasks, retrieve tasks, mark tasks as complete, and delete tasks.
 
----
+## Features
 
-## 🚀 Features
+- User registration with password hashing
+- Add tasks for authenticated users
+- Retrieve all tasks for a user
+- Mark tasks as completed
+- Delete tasks
+- Authentication via username and password
 
-* User registration and login (JWT authentication)
-* Add, retrieve, update, and delete tasks
-* Mark tasks as completed / incomplete (toggle)
-* Persistent storage using PostgreSQL
-* RESTful API built with FastAPI
-* React frontend for interactive UI
-* CORS-enabled for frontend-backend communication
+## Prerequisites
 
----
+- Python 3.8+
+- PostgreSQL database
+- Virtual environment (recommended)
 
-## 🛠 Tech Stack
+## Installation
 
-### Backend
+1. Clone or navigate to the project directory.
 
-* FastAPI
-* SQLAlchemy
-* PostgreSQL
-* Pydantic
-* JWT Authentication
+2. Create a virtual environment:
+   ```
+   python -m venv venv
+   ```
 
-### Frontend
+3. Activate the virtual environment:
+   - On Windows: `venv\Scripts\activate`
+   - On macOS/Linux: `source venv/bin/activate`
 
-* React (Vite)
-* Fetch API
+4. Install dependencies:
+   ```
+   pip install fastapi uvicorn sqlalchemy passlib[bcrypt] psycopg2-binary pydantic
+   ```
 
----
+5. Set up the PostgreSQL database:
+   - Create a database named `todo`
+   - Update the `DATABASE_URL` in `database.py` if necessary (default: `postgresql://postgres:Forsythej2@localhost:5432/todo`)
 
-## 📂 Project Structure
+6. Run the database migrations (models are created automatically on startup).
 
-```
-backend/
-│
-├── main.py          # FastAPI routes
-├── database.py      # DB connection
-├── model.py         # SQLAlchemy models
-├── schemas.py       # Pydantic schemas
-├── auth.py          # Authentication logic
-│
-frontend/
-│
-├── src/
-│   ├── App.jsx
-│   ├── mainUI.jsx
-│
-```
+## Usage
 
----
+1. Start the FastAPI server:
+   ```
+   uvicorn main:app --reload
+   ```
 
-## ⚙️ Setup Instructions
+2. The API will be available at `http://127.0.0.1:8000`
 
-### 1. Clone the repository
+3. Access the interactive API documentation at `http://127.0.0.1:8000/docs`
 
-```
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
-```
+## API Endpoints
 
----
+### POST /Register
+Register a new user.
 
-### 2. Backend Setup
+- **Parameters:**
+  - `user_name` (str): Username
+  - `pass_word` (str): Password
 
-Create virtual environment:
+- **Response:** Success message or error if user exists.
 
-```
-python -m venv venv
-```
+### POST /AddTask
+Add a new task for a user.
 
-Activate:
+- **Parameters:**
+  - `user_name` (str): Username
+  - `pass_word` (str): Password
+  - `task` (str): Task title
 
-```
-venv\Scripts\activate   # Windows
-```
+- **Response:** Success message or authentication error.
 
-Install dependencies:
+### GET /retrive
+Retrieve all tasks for a user.
 
-```
-pip install -r requirements.txt
-```
+- **Parameters:**
+  - `user_name` (str): Username
+  - `pass_word` (str): Password
 
-Run server:
+- **Response:** List of tasks or error.
 
-```
-uvicorn main:app --reload
-```
+### PUT /complete
+Mark a task as completed.
 
----
+- **Parameters:**
+  - `user_name` (str): Username
+  - `pass_word` (str): Password
+  - `task` (str): Task title
 
-### 3. Frontend Setup
+- **Response:** Success message or error.
 
-```
-cd frontend
-npm install
-npm run dev
-```
+### DELETE /delete
+Delete a task.
 
----
+- **Parameters:**
+  - `user_name` (str): Username
+  - `pass_word` (str): Password
+  - `task` (str): Task title
 
-## 🔐 Authentication
+- **Response:** Success message or error.
 
-* Uses JWT tokens
-* Token must be included in requests:
+## Project Structure
 
-```
-Authorization: Bearer <your_token>
-```
+- `main.py`: FastAPI application and endpoints
+- `auth.py`: Password hashing and verification
+- `database.py`: Database configuration
+- `model.py`: SQLAlchemy models
+- `schemas.py`: Pydantic schemas
 
----
+## Contributing
 
-## 📡 API Endpoints
+Feel free to contribute by opening issues or pull requests.
 
-| Method | Endpoint  | Description        |
-| ------ | --------- | ------------------ |
-| POST   | /Register | Register user      |
-| POST   | /Login    | Login user         |
-| GET    | /retrive  | Get user tasks     |
-| POST   | /AddTask  | Add new task       |
-| PUT    | /complete | Toggle task status |
-| DELETE | /delete   | Delete task        |
+## License
 
----
-
-## ⚠️ Notes
-
-* Make sure PostgreSQL is running before starting backend
-* Ensure correct DB credentials in configuration
-* CORS is configured for `http://localhost:5173`
-
----
-
-## 📌 Future Improvements
-
-* Pagination for tasks
-* Better error handling
-* UI improvements
-* Deployment (Docker / Cloud)
-
----
-
-## 📜 License
-
-This project is open-source and available under the MIT License.
-
+This project is open source. Use at your own risk.
